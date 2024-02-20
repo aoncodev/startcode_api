@@ -1,12 +1,12 @@
 import { AppDataSource } from "../data-source";
-import { NextFunction, Request, Response } from "express";
 import * as express from "express";
 import { User } from "../entity/User";
 import * as bcrypt from "bcrypt";
 import validator from "validator";
+import { authenticateToken } from "../middleware/auth";
 const router = express.Router();
 
-router.get("/users", async (req, res) => {
+router.get("/users", authenticateToken, async (req, res) => {
   const userRepository = AppDataSource.getRepository(User);
   await userRepository.find().then((result) => {
     res.status(200).json(result);
@@ -50,7 +50,7 @@ router.post("/user", async (req, res) => {
   }
 });
 
-router.get("/user/:id", async (req, res) => {
+router.get("/user/:id", authenticateToken, async (req, res) => {
   const userRepository = AppDataSource.getRepository(User);
   const id = parseInt(req.params.id);
 
@@ -64,7 +64,7 @@ router.get("/user/:id", async (req, res) => {
   return res.status(200).json(user);
 });
 
-router.delete("/user/:id", async (req, res) => {
+router.delete("/user/:id", authenticateToken, async (req, res) => {
   const userRepository = AppDataSource.getRepository(User);
   const id = parseInt(req.params.id);
 

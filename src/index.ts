@@ -2,7 +2,11 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
-import UserController from "./router/UserController";
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import userController from "./router/users";
+import login from './router/login';
 
 const app = express();
 AppDataSource.initialize()
@@ -12,6 +16,7 @@ AppDataSource.initialize()
   .catch((error) => console.log(error));
 
 app.use(bodyParser.json());
-app.use("/api", UserController);
+app.use("/api", userController);
+app.use("/api", login);
 app.listen(3000);
 console.log("Express server has started on port 3000");
