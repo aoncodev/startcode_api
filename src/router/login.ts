@@ -7,10 +7,9 @@ import { generateToken } from "../utils/jwt";
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
-  const userRepository = AppDataSource.getRepository(User);
-  const { userID, password } = req.body;
-
   try {
+    const userRepository = AppDataSource.getRepository(User);
+    const { userID, password } = req.body;
     const user = await userRepository.findOne({ where: { userID: userID } });
     if (!user) {
       return res.status(400).json({ message: "Wrong ID" });
